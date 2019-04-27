@@ -5,6 +5,8 @@
 [sub_resource type="GDScript" id=1]
 script/source = "extends Area2D
 
+signal hit
+
 # Declare member variables here. Examples:
 # var a = 2
 # var b = \"text\"
@@ -30,7 +32,25 @@ func _process(delta):
 		$AnimatedSprite.stop()
 	position += velocity * delta
 	position.x = clamp(position.x, 0, screen_size.x)
-	position.y = clamp(position.y, 0, screen_size.y)"
+	position.y = clamp(position.y, 0, screen_size.y)
+	
+	if velocity.x != 0:
+		$AnimatedSprite.flip_v = false
+		$AnimatedSprite.flip_h = velocity.x < 0
+	elif velocity.y != 0:
+		$AnimatedSprite.animation = \"up\"
+		$AnimatedSprite.flip_v = velocity.y > 0
+		
+func start(pos):
+	position = pos
+	show()
+	$CollisionShape2D.disabled = false
+
+func _on_Player_body_entered(body):
+	hide()  # Player disappears after being hit.
+	emit_signal(\"hit\")
+	$CollisionShape2D.call_deferred(\"set_disabled\", true)
+"
 
 [sub_resource type="SpriteFrames" id=2]
 animations = [ {
@@ -52,3 +72,4 @@ frames = SubResource( 2 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 3 )
 
+[connection signal="body_entered" from="." to="." method="_on_Player_body_entered"]
