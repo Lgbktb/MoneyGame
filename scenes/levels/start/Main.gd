@@ -27,6 +27,7 @@ func _on_EnemyTimer_timeout():
 	mob.rotation = direction
 	mob.linear_velocity = Vector2(rand_range(mob.min_speed, mob.max_speed), 0)
 	mob.linear_velocity = mob.linear_velocity.rotated(direction)
+	mob.add_to_group("enemy")
 	
 
 func _on_ScoreTimer_timeout():
