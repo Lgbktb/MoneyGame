@@ -7,10 +7,11 @@
 [node name="Node" type="Node"]
 
 [node name="Node2D" parent="." instance=ExtResource( 1 )]
+position = Vector2( 290.109, 348.689 )
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 0.773773, -69.6403 )
+position = Vector2( 290.883, 279.048 )
 
 [node name="Enemy" parent="." instance=ExtResource( 3 )]
-position = Vector2( 367.546, -50.2957 )
+position = Vector2( 657.655, 298.393 )
 
