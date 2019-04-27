@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/kid pepe.jpg-1402a29b4ca215efbdb62f1aab0cd4ae.stex"
+path="res://.import/basic_platform.png-0e1ebab06ba2ddc4210f560e62372b8c.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://enemies/kid pepe.jpg"
-dest_files=[ "res://.import/kid pepe.jpg-1402a29b4ca215efbdb62f1aab0cd4ae.stex" ]
+source_file="res://assets/platforms/basic_platform.png"
+dest_files=[ "res://.import/basic_platform.png-0e1ebab06ba2ddc4210f560e62372b8c.stex" ]
 
 [params]
 
