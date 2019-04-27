@@ -45,3 +45,7 @@ func _on_Player_body_entered(body):
 	hide()  # Player disappears after being hit.
 	emit_signal("hit")
 	$CollisionShape2D.call_deferred("set_disabled", true)
+
+
+func _on_Player_hit():
+	pass # Replace with function body.
