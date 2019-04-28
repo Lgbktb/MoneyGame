@@ -1,6 +1,6 @@
 extends KinematicBody2D
 
-# Declare member variables here. Examples:
+# Declare member variables here.
 const RIGHT = 1
 const LEFT = -1
 
@@ -13,12 +13,16 @@ export var gravity_modifier = 9.8
 const GRAVITY = 100
 
 export var jump_modifier = 2.5
-var jump_fade = 2.5
+export var max_jump_fade = 5
+export var jump_fade_increment = .25
 const JUMP_HEIGHT = -100
 var is_jump = false
+var jump_fade = 0
 
-export var move_speed_modifier = 5.0
-const MOVE_SPEED = 100
+export var max_move_speed_modifier = 5
+export var move_speed_acceleartion = 2.0
+const MAX_MOVE_SPEED = 10
+const MOVE_SPEED = 10
 
 var on_ground = false
 var move_horizontal = 0
@@ -36,19 +40,16 @@ func _process(delta):
 func input():
 	if Input.is_action_pressed("move_right"):
 		move_horizontal = RIGHT
-		
-	if Input.is_action_pressed("move_left"):
+	elif Input.is_action_pressed("move_left"):
 		move_horizontal = LEFT
+	else:
+		move_horizontal = STOP
 	
-	if Input.is_action_just_pressed("move_jump"):
+	if Input.is_action_just_pressed("move_jump") || Input.is_action_just_pressed("move_up"):
 		if on_ground:
 			is_jump = true
-	elif Input.is_action_just_released("move_jump"):
+	elif Input.is_action_just_released("move_jump") || Input.is_action_just_pressed("move_up"):
 		is_jump = false
-
-func clear_movement():
-	move_horizontal = CLEAR
-	velocity.x = 0
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
@@ -61,34 +62,39 @@ func _physics_process(delta):
 		
 		else:
 			velocity.y = JUMP_HEIGHT * jump_fade
-			if jump_fade < 5:
-				jump_fade += 1
+			if jump_fade < max_jump_fade:
+				jump_fade += jump_fade_increment
 			else:
 				is_jump = false
 	
 	if move_horizontal != STOP:
-		velocity.x = move_horizontal * (MOVE_SPEED * move_speed_modifier)
+		if move_horizontal == RIGHT:
+			velocity.x = min(velocity.x + (MOVE_SPEED * move_speed_acceleartion), (MAX_MOVE_SPEED * max_move_speed_modifier))
+		if move_horizontal == LEFT:
+			velocity.x = max(velocity.x - (MOVE_SPEED * move_speed_acceleartion), -(MAX_MOVE_SPEED * max_move_speed_modifier))
+	else:
+		velocity.x = lerp(velocity.x, 0, 0.1)
+		
+	print(velocity.x)
 	
-	animation(velocity)
+	animation()
 	
 	velocity = move_and_slide(velocity, FLOOR)
-
-	clear_movement()
 	
 	if is_on_floor():
 		on_ground = true
 	else:
 		on_ground = false
 
-func animation(velocity):
-	if velocity.length() > 0:
+func animation():
+	if move_horizontal > 0:
 		$AnimatedSprite.play()
 	else:
 		$AnimatedSprite.stop()
 	
-	if velocity.x != 0:
+	if move_horizontal != 0:
 		$AnimatedSprite.flip_v = false
-		$AnimatedSprite.flip_h = velocity.x < 0
+		$AnimatedSprite.flip_h = move_horizontal < 0
 
 func gravity(delta):
 	return (GRAVITY * gravity_modifier) * delta
