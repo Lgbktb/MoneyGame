@@ -12,7 +12,8 @@ const FLOOR = Vector2(0,-1)
 export var gravity_modifier = 9.8
 const GRAVITY = 100
 
-export var jump_modifier = 10.0
+export var jump_modifier = 2.5
+var jump_fade = 2.5
 const JUMP_HEIGHT = -100
 var is_jump = false
 
@@ -23,6 +24,7 @@ var on_ground = false
 var move_horizontal = 0
 
 var velocity = Vector2(0,0)
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -39,7 +41,8 @@ func input():
 		move_horizontal = LEFT
 	
 	if Input.is_action_just_pressed("move_jump"):
-		is_jump = true
+		if on_ground:
+			is_jump = true
 	elif Input.is_action_just_released("move_jump"):
 		is_jump = false
 
@@ -51,9 +54,17 @@ func clear_movement():
 func _physics_process(delta):
 	velocity.y += gravity(delta)
 	
-	if on_ground:
-		if is_jump:
+	if is_jump:
+		if on_ground:
 			velocity.y = JUMP_HEIGHT * jump_modifier
+			jump_fade = jump_modifier
+		
+		else:
+			velocity.y = JUMP_HEIGHT * jump_fade
+			if jump_fade < 5:
+				jump_fade += 1
+			else:
+				is_jump = false
 	
 	if move_horizontal != STOP:
 		velocity.x = move_horizontal * (MOVE_SPEED * move_speed_modifier)
