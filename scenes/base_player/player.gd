@@ -12,14 +12,14 @@ const FLOOR = Vector2(0,-1)
 export var gravity_modifier = 9.8
 const GRAVITY = 100
 
-export var jump_modifier = 2.5
+export var jump_modifier = 3.5
 export var max_jump_fade = 5
-export var jump_fade_increment = .25
+export var jump_fade_increment = .2
 const JUMP_HEIGHT = -100
 var is_jump = false
 var jump_fade = 0
 
-export var max_move_speed_modifier = 5
+export var max_move_speed_modifier = 50
 export var move_speed_acceleartion = 2.0
 const MAX_MOVE_SPEED = 10
 const MOVE_SPEED = 10
@@ -32,7 +32,7 @@ var velocity = Vector2(0,0)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	pass
 
 func _process(delta):
 	input()
@@ -48,7 +48,7 @@ func input():
 	if Input.is_action_just_pressed("move_jump") || Input.is_action_just_pressed("move_up"):
 		if on_ground:
 			is_jump = true
-	elif Input.is_action_just_released("move_jump") || Input.is_action_just_pressed("move_up"):
+	elif Input.is_action_just_released("move_jump") || Input.is_action_just_released("move_up"):
 		is_jump = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -73,10 +73,8 @@ func _physics_process(delta):
 		if move_horizontal == LEFT:
 			velocity.x = max(velocity.x - (MOVE_SPEED * move_speed_acceleartion), -(MAX_MOVE_SPEED * max_move_speed_modifier))
 	else:
-		velocity.x = lerp(velocity.x, 0, 0.1)
+		velocity.x = lerp(velocity.x, 0, 0.2)
 		
-	print(velocity.x)
-	
 	animation()
 	
 	velocity = move_and_slide(velocity, FLOOR)
