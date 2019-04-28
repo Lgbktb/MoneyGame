@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scenes/base_player/player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/tiles/generic_map/generic_map.tres" type="TileSet" id=2]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="player" parent="." instance=ExtResource( 1 )]
+position = Vector2( 64, 64 )
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = ExtResource( 2 )
+cell_size = Vector2( 32, 32 )
+format = 1
+tile_data = PoolIntArray( 0, 0, 65537, 1, 0, 65537, 2, 0, 65537, 3, 0, 65537, 65536, 0, 65537, 65539, 0, 65537, 65542, 0, 0, 65543, 0, 2, 131072, 0, 65537, 131075, 0, 65537, 131078, 0, 131072, 131079, 0, 131074, 196608, 0, 65537, 196609, 0, 65537, 196610, 0, 65537, 196611, 0, 65537 )
+
